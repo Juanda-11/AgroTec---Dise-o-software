@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: agrotec
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/agrotec}
+      auto-index-creation: true
+  jackson:
+    default-property-inclusion: non_null
+
+server:
+  port: ${PORT:8080}
+
+agrotec:
+  jwt:
+    # CAMBIAR en producción (variable de entorno JWT_SECRET, mínimo 32 caracteres)
+    secret: ${JWT_SECRET:dev-only-secret-agrotec-change-me-0123456789}
+    expiration-minutes: 1440
+  weather:
+    # simulated = datos simulados (demo/offline) | openmeteo = Open-Meteo (gratis, sin llave)
+    provider: ${WEATHER_PROVIDER:simulated}
+  seed:
+    enabled: true
+    # Usuarios de demostración (SOLO desarrollo): admin 3000000000 / asesor 3000000001
+    demo-users: ${SEED_DEMO_USERS:true}
+  # En desarrollo el código de recuperación se devuelve en la respuesta (no hay pasarela SMS real)
+  dev-expose-reset-code: ${DEV_EXPOSE_RESET_CODE:true}
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+logging:
+  level:
+    com.agrotec: INFO
