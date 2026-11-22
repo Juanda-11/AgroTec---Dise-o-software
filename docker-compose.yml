@@ -1,0 +1,34 @@
+# Levanta la API de AgroTec y MongoDB:  docker compose up --build
+# App web:   http://localhost:8080        Documentación de la API:   http://localhost:8080/swagger-ui.html
+services:
+  mongo:
+    image: mongo:7
+    container_name: agrotec-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: agrotec-api
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+    environment:
+      MONGODB_URI: mongodb://mongo:27017/agrotec
+      # Cambia este valor en producción (mínimo 32 caracteres):
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-agrotec-change-me-0123456789}
+      WEATHER_PROVIDER: ${WEATHER_PROVIDER:-simulated}
+      SEED_DEMO_USERS: ${SEED_DEMO_USERS:-true}
+      DEV_EXPOSE_RESET_CODE: ${DEV_EXPOSE_RESET_CODE:-true}
+    ports:
+      - "8080:8080"
+
+volumes:
+  mongo-data:
