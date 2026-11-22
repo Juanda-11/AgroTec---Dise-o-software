@@ -59,7 +59,7 @@ Complementarias que surgen de la encuesta: notificaciones por WhatsApp, capacita
 
 ```
 AGENTS.md                   Este archivo (contexto del proyecto)
-README.md                   Presentación del repositorio
+README.md                   Presentación y tablas de HU por módulo con enlace a su issue
 docs/requerimientos.md      Requerimientos funcionales (RF) y no funcionales (RNF)
 docs/historias-usuario.md   Historias de usuario (HU) con trazabilidad a los RF/RNF
 docs/wireframes/            Wireframes (mockups) en SVG, uno por pantalla
@@ -70,10 +70,10 @@ Las historias de usuario viven también como **issues** de GitHub, cada una con 
 ## 10. Convenciones
 
 - **Idioma:** español (Colombia) en todos los documentos, issues y comentarios.
-- **IDs:** requerimientos funcionales `RF-01`, no funcionales `RNF-01`, historias de usuario `HU-01` (dos dígitos, consecutivos, nunca se reutilizan).
+- **IDs:** requerimientos funcionales `RF-01`, no funcionales `RNF-01`, historias de usuario `HU_001` (tres dígitos, consecutivos por módulo, nunca se reutilizan).
 - **Trazabilidad:** cada requerimiento debe tener **al menos una** historia de usuario; cada historia indica su RF/RNF y su wireframe.
 - **Historias de usuario:** formato «Como *rol* quiero *acción* para *beneficio*», con criterios de aceptación verificables.
-- **Issues:** título `HU-XX · <título>`; cuerpo con historia, requerimiento asociado, criterios de aceptación y wireframe incrustado; etiquetas `historia-de-usuario`, el ID del requerimiento (p. ej. `RF-05`) y la prioridad (`prioridad-alta|media|baja`).
+- **Issues:** título `HU_XXX <título>`; cuerpo con Descripción (Como / Quiero / Para), requerimiento asociado, criterios de aceptación numerados y Wireframe incrustado; etiquetas `historia-de-usuario`, el módulo (`modulo-1` … `modulo-7`), el ID del requerimiento (p. ej. `RF-05`) y la prioridad (`prioridad-alta|media|baja`). La pantalla principal (README) lista las HU por módulo con enlace a su issue.
 - **Wireframes:** archivos SVG de baja fidelidad (360×720, vista móvil) nombrados `NN-nombre-pantalla.svg`.
 - **Lenguaje de producto:** simple y cotidiano; evita tecnicismos en textos de interfaz.
 
