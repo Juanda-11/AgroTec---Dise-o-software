@@ -6,6 +6,20 @@ Asistente virtual inteligente para agricultores: app móvil sencilla para organi
 - 📋 Requerimientos: [docs/requerimientos.md](docs/requerimientos.md)
 - 🧑‍🌾 Historias de usuario: [docs/historias-usuario.md](docs/historias-usuario.md)
 - 🖼️ Wireframes: [docs/wireframes/](docs/wireframes/README.md)
+- 🏗️ Arquitectura (5 vistas, patrones, guía de estudio): [docs/arquitectura/](docs/arquitectura/README.md)
+- ▶️ Cómo ejecutar y probar: [docs/guia-ejecucion.md](docs/guia-ejecucion.md)
+
+## Ejecutar
+
+```
+docker compose up --build
+```
+
+Abre http://localhost:8080 (app web móvil) y http://localhost:8080/swagger-ui.html (documentación del API). Usuario de demostración: celular `3001234567`, contraseña `1234`. Más opciones en la [guía de ejecución](docs/guia-ejecucion.md).
+
+**Stack:** Java 17 · Spring Boot 3 (Web, Security con JWT, Data MongoDB, Validation) · MongoDB 7 · frontend PWA en JavaScript puro · Docker.
+
+> Las integraciones con clima, precios, WhatsApp/SMS y pagos están **simuladas** detrás de interfaces; ver el estado de cada historia en [trazabilidad](docs/arquitectura/trazabilidad.md).
 
 Autor: Juan David Jurado Paz · Universidad Cooperativa de Colombia
 

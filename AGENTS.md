@@ -52,17 +52,24 @@ Complementarias que surgen de la encuesta: notificaciones por WhatsApp, capacita
 
 ## 8. Alcance y estado
 
-- Alcance actual: **análisis y diseño** (requerimientos, historias de usuario y wireframes). Aún no hay código.
-- Stack tecnológico: **por definir** en la etapa de diseño. Restricción conocida: la app debe funcionar en Android e iOS y en dispositivos de gama baja.
+- Alcance: **análisis y diseño** (requerimientos, historias de usuario, wireframes y las 5 vistas de arquitectura) más una **implementación**: backend obligatorio y frontend opcional.
+- Stack (definido por la materia): **backend Java 17 + Spring Boot 3, base de datos MongoDB**; frontend web móvil (PWA) en JavaScript puro, servido por el mismo backend. Despliegue con Docker Compose.
+- Integraciones externas **simuladas** (clima por defecto, precios de ejemplo, WhatsApp/SMS/push, pasarela de pagos) detrás de interfaces (`WeatherProvider`, `NotificationChannel`, `PaymentGateway`). No presentarlas como reales.
 
 ## 9. Estructura del repositorio
 
 ```
 AGENTS.md                   Este archivo (contexto del proyecto)
-README.md                   Presentación y tablas de HU por módulo con enlace a su issue
+README.md                   Presentación, HU por módulo con enlace a su issue y cómo ejecutar
+Dockerfile, docker-compose.yml   Despliegue (API + MongoDB)
+backend/                    API Spring Boot (paquete com.agrotec: web, service, domain, repository, integration, ...)
+frontend/                   App web móvil (PWA): index.html, css/, js/, sw.js
 docs/requerimientos.md      Requerimientos funcionales (RF) y no funcionales (RNF)
 docs/historias-usuario.md   Historias de usuario (HU) con trazabilidad a los RF/RNF
 docs/wireframes/            Wireframes (mockups) en SVG, uno por pantalla
+docs/arquitectura/          Las 5 vistas (contexto, funcional, lógica, desarrollo, despliegue), guía de Visual Paradigm,
+                            trazabilidad HU→código y guía de estudio para la sustentación
+docs/guia-ejecucion.md      Cómo ejecutar, probar y configurar
 ```
 
 Las historias de usuario viven también como **issues** de GitHub, cada una con su wireframe.
