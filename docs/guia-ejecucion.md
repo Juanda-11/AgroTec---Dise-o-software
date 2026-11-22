@@ -7,7 +7,8 @@ AgroTec = **backend** (Java 17 + Spring Boot 3 + MongoDB) + **frontend** (web m�
 | Opción | Necesitas |
 |---|---|
 | **A. Docker (la más fácil)** | Docker Desktop |
-| **B. Local** | JDK 17 o superior, Maven 3.9+ y MongoDB 7 (o Docker solo para la base) |
+| **B. Local (sin Docker)** | JDK 17 o superior y MongoDB. Maven no hace falta: el proyecto trae `mvnw` |
+| **C. VS Code** | Lo mismo que la opción B, más la extensión «Extension Pack for Java» |
 
 ## Opción A: Docker
 
@@ -17,24 +18,48 @@ docker compose up --build
 
 Abre http://localhost:8080 (app) y http://localhost:8080/swagger-ui.html (documentación del API).
 
-## Opción B: local
+## Opción B: local, sin Docker
 
-1. Inicia MongoDB (si no lo tienes instalado, con Docker):
+### Instalar lo necesario (una sola vez)
+
+1. **JDK 17 o superior:** descarga *Temurin 17 (LTS)* para Windows (.msi) en https://adoptium.net. En el instalador activa **«Set JAVA_HOME variable»** y **«Add to PATH»**. Cierra y vuelve a abrir la terminal. Comprueba con:
 
 ```powershell
-docker run -d --name agrotec-mongo -p 27017:27017 mongo:7
+java -version
 ```
 
-2. Arranca el backend:
+2. **MongoDB:** una de estas dos:
+   - **Instalado en tu PC:** descarga *MongoDB Community Server* (.msi) en https://www.mongodb.com/try/download/community y deja marcado **«Install MongoDB as a Service»**. Queda corriendo solo en el puerto 27017 y no necesitas configurar nada más.
+   - **En la nube (sin instalar):** crea un clúster gratuito en MongoDB Atlas, copia su cadena de conexión y úsala en la variable `MONGODB_URI` (ver más abajo).
+
+### Arrancar
+
+Desde la carpeta del proyecto:
 
 ```powershell
 cd backend
-mvn spring-boot:run
+.\mvnw.cmd spring-boot:run
 ```
 
-3. Abre http://localhost:8080.
+La primera vez descarga Maven y las librerías (unos minutos). Cuando veas `Started AgroTecApplication`, abre http://localhost:8080.
 
-También puedes abrir la carpeta `backend` en VS Code o IntelliJ y ejecutar la clase `AgroTecApplication`.
+Con Atlas, define la conexión antes de arrancar:
+
+```powershell
+$env:MONGODB_URI = "mongodb+srv://USUARIO:CLAVE@TU-CLUSTER.mongodb.net/agrotec"
+.\mvnw.cmd spring-boot:run
+```
+
+## Opción C: VS Code
+
+1. Instala la extensión **Extension Pack for Java** (Microsoft) y haz lo de «Instalar lo necesario» de la opción B.
+2. Abre la **carpeta del repositorio** en VS Code (Archivo → Abrir carpeta).
+3. Abre `backend/src/main/java/com/agrotec/AgroTecApplication.java` y pulsa **Run** (arriba de `main`) o la tecla F5. La primera vez VS Code importa el proyecto Maven; espera a que termine el indicador de la barra inferior.
+4. Abre http://localhost:8080.
+
+Para otra base de datos (Atlas), crea `.vscode/launch.json` con la variable de entorno `MONGODB_URI` en `env`, o define la variable de entorno de Windows antes de abrir VS Code.
+
+Si prefieres usar la terminal de VS Code (Ctrl+Ñ), los comandos de la opción B funcionan igual.
 
 ## Usuarios de demostración (solo desarrollo)
 
