@@ -12,6 +12,7 @@ Documentos para la presentación de **Diseño de Software**. Cada vista correspo
 
 Material de apoyo:
 
+- [guia-completa-diagramas.md](guia-completa-diagramas.md): **empieza aquí**. Los 5 diagramas completos: todos los elementos, todas las conexiones, ubicación y lista de revisión.
 - [guia-visual-paradigm.md](guia-visual-paradigm.md): cómo dibujar cada diagrama paso a paso y buenas prácticas de presentación.
 - [trazabilidad.md](trazabilidad.md): de cada historia de usuario al endpoint y a la clase que la implementa.
 - [preguntas-profesor.md](preguntas-profesor.md): guía de estudio con preguntas probables y respuestas.
