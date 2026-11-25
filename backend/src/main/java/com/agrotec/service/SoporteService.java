@@ -7,7 +7,6 @@ import com.agrotec.dto.SoporteDto;
 import com.agrotec.exception.NotFoundException;
 import com.agrotec.repository.ConsultaSoporteRepository;
 import com.agrotec.repository.UsuarioRepository;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -56,19 +55,14 @@ public class SoporteService {
 
     public SoporteDto.Response tomar(String id) {
         ConsultaSoporte c = buscar(id);
-        if (c.getEstado() == EstadoConsulta.ENVIADA) {
-            c.setEstado(EstadoConsulta.EN_REVISION);
-        }
+        c.tomar();
         return SoporteDto.Response.de(consultas.save(c));
     }
 
     public SoporteDto.Response responder(String asesorId, String id, SoporteDto.RespuestaRequest r) {
         ConsultaSoporte c = buscar(id);
         Usuario asesor = usuarios.findById(asesorId).orElseThrow(() -> new NotFoundException("Asesor no encontrado"));
-        c.setRespuesta(r.respuesta().trim());
-        c.setEstado(EstadoConsulta.RESPONDIDA);
-        c.setAsesorNombre(asesor.getNombre());
-        c.setRespondidaEn(Instant.now());
+        c.responder(r.respuesta().trim(), asesor.getNombre());
         ConsultaSoporte guardada = consultas.save(c);
         usuarios.findById(c.getUsuarioId()).ifPresent(agricultor ->
                 notificaciones.enviarMensaje(agricultor, null, "Tu asesor respondió tu consulta", guardada.getRespuesta()));

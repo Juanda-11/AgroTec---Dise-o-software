@@ -53,7 +53,7 @@ public class ClimaService {
     public Forecast forecast(Finca f) {
         double lat;
         double lon;
-        if (f.getLatitud() != null && f.getLongitud() != null) {
+        if (f.tieneUbicacion()) {
             lat = f.getLatitud();
             lon = f.getLongitud();
         } else {

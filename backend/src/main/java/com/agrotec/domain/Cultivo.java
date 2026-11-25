@@ -26,6 +26,16 @@ public class Cultivo {
     private String notas;
     private Instant actualizadoEn = Instant.now();
 
+
+    public void cambiarEstado(EstadoCultivo nuevo) {
+        estado = nuevo;
+        actualizadoEn = Instant.now();
+    }
+
+    public boolean estaActivo() {
+        return estado == EstadoCultivo.ACTIVO;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

@@ -1,5 +1,6 @@
 package com.agrotec.domain;
 
+import java.time.Duration;
 import java.time.Instant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -39,6 +40,32 @@ public class Usuario {
             return PlanTipo.PLUS;
         }
         return PlanTipo.GRATIS;
+    }
+
+
+    /** true si la cuenta está bloqueada por intentos fallidos. */
+    public boolean estaBloqueado(Instant ahora) {
+        return bloqueadoHasta != null && bloqueadoHasta.isAfter(ahora);
+    }
+
+    /** Cuenta un intento fallido; al llegar al máximo bloquea la cuenta durante {@code bloqueo}. */
+    public void registrarIntentoFallido(Instant ahora, int maximo, Duration bloqueo) {
+        intentosFallidos++;
+        if (intentosFallidos >= maximo) {
+            bloqueadoHasta = ahora.plus(bloqueo);
+            intentosFallidos = 0;
+        }
+    }
+
+    public void reiniciarIntentos() {
+        intentosFallidos = 0;
+        bloqueadoHasta = null;
+    }
+
+    /** Activa el plan Plus hasta la fecha indicada (RF-14). */
+    public void activarPlus(Instant hasta) {
+        plan = PlanTipo.PLUS;
+        planVigenteHasta = hasta;
     }
 
     public String getId() { return id; }

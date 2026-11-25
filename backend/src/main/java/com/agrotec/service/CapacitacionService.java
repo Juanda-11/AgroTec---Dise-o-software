@@ -6,8 +6,6 @@ import com.agrotec.dto.CapacitacionDto;
 import com.agrotec.exception.NotFoundException;
 import com.agrotec.repository.AvanceCapacitacionRepository;
 import com.agrotec.repository.CapacitacionRepository;
-import com.agrotec.util.Textos;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,9 +27,8 @@ public class CapacitacionService {
     public List<CapacitacionDto.Response> listar(String usuarioId, String cultivo) {
         Map<String, Integer> avancePorModulo = new HashMap<>();
         avances.findByUsuarioId(usuarioId).forEach(a -> avancePorModulo.put(a.getCapacitacionId(), a.getPorcentaje()));
-        String filtro = Textos.normalizar(cultivo);
         return capacitaciones.findAll().stream()
-                .filter(c -> filtro.isEmpty() || c.getCultivo() == null || Textos.normalizar(c.getCultivo()).equals(filtro))
+                .filter(c -> c.aplicaA(cultivo))
                 .map(c -> aRespuesta(c, avancePorModulo.getOrDefault(c.getId(), 0)))
                 .toList();
     }
@@ -43,8 +40,7 @@ public class CapacitacionService {
                 .orElseGet(AvanceCapacitacion::new);
         a.setUsuarioId(usuarioId);
         a.setCapacitacionId(capacitacionId);
-        a.setPorcentaje(porcentaje);
-        a.setActualizadoEn(Instant.now());
+        a.actualizar(porcentaje);
         avances.save(a);
         return aRespuesta(c, porcentaje);
     }

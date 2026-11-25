@@ -1,5 +1,7 @@
 package com.agrotec.domain;
 
+import com.agrotec.util.HorarioSilencioso;
+import java.time.LocalTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -13,6 +15,16 @@ public class PreferenciasNotificacion {
     /** Formato HH:mm. Ejemplo: 21:00 a 05:00. */
     private String silencioInicio;
     private String silencioFin;
+
+    /** ¿El agricultor quiere recibir este tipo de alerta? */
+    public boolean permite(TipoAlerta tipo) {
+        return tipos.contains(tipo);
+    }
+
+    /** ¿La hora cae dentro del horario silencioso? */
+    public boolean estaEnSilencio(LocalTime hora) {
+        return HorarioSilencioso.estaEnSilencio(hora, silencioInicio, silencioFin);
+    }
 
     public Set<Canal> getCanales() { return canales; }
     public void setCanales(Set<Canal> canales) { this.canales = canales; }

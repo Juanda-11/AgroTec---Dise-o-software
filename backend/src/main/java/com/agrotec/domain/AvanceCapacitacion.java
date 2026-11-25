@@ -17,6 +17,12 @@ public class AvanceCapacitacion {
     private int porcentaje;
     private Instant actualizadoEn = Instant.now();
 
+
+    public void actualizar(int nuevoPorcentaje) {
+        porcentaje = nuevoPorcentaje;
+        actualizadoEn = Instant.now();
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

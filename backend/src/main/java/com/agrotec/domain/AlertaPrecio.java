@@ -18,6 +18,16 @@ public class AlertaPrecio {
     /** Último día en que se notificó (evita avisar varias veces el mismo día). */
     private LocalDate ultimaNotificacion;
 
+
+    /** ¿El precio alcanzó el objetivo y aún no se avisó en esa fecha? */
+    public boolean seCumple(long precio, LocalDate fecha) {
+        return activa && precio >= precioObjetivo && !fecha.equals(ultimaNotificacion);
+    }
+
+    public void marcarNotificada(LocalDate fecha) {
+        ultimaNotificacion = fecha;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

@@ -51,8 +51,7 @@ public class ActividadService {
 
     public ActividadDto.Response completar(String usuarioId, String id) {
         Actividad a = buscar(usuarioId, id);
-        a.setCompletada(true);
-        a.setActualizadoEn(Instant.now());
+        a.completar();
         return ActividadDto.Response.de(actividades.save(a));
     }
 

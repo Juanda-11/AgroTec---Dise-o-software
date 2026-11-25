@@ -133,8 +133,7 @@ public class PrecioService {
         for (AlertaPrecio ap : alertasPrecio.findByActivaTrue()) {
             try {
                 var actual = precios.findByProductoIgnoreCaseAndPlazaAndFecha(ap.getProducto(), ap.getPlaza(), ultima.get());
-                if (actual.isPresent() && actual.get().getPrecio() >= ap.getPrecioObjetivo()
-                        && !ultima.get().equals(ap.getUltimaNotificacion())) {
+                if (actual.isPresent() && ap.seCumple(actual.get().getPrecio(), ultima.get())) {
                     PrecioMercado p = actual.get();
                     alertas.crear(ap.getUsuarioId(), TipoAlerta.PRECIO, NivelRiesgo.BAJO,
                             p.getProducto() + " alcanzó tu precio objetivo",
@@ -142,7 +141,7 @@ public class PrecioService {
                                     p.getUnidad(), ap.getPrecioObjetivo()),
                             "Es un buen momento para comparar compradores y decidir si vendes.", null, p.getFuente(),
                             "precio:" + ap.getId() + ":" + ultima.get());
-                    ap.setUltimaNotificacion(ultima.get());
+                    ap.marcarNotificada(ultima.get());
                     alertasPrecio.save(ap);
                     enviadas++;
                 }
@@ -166,8 +165,7 @@ public class PrecioService {
     private PrecioDto.Item item(PrecioMercado p) {
         double variacion = precios.findByProductoIgnoreCaseAndPlazaAndFecha(p.getProducto(), p.getPlaza(),
                         p.getFecha().minusDays(1))
-                .filter(prev -> prev.getPrecio() > 0)
-                .map(prev -> (p.getPrecio() - prev.getPrecio()) * 100.0 / prev.getPrecio())
+                .map(prev -> p.variacionRespecto(prev.getPrecio()))
                 .orElse(0.0);
         double redondeada = Math.round(variacion * 10) / 10.0;
         Tendencia t = Math.abs(redondeada) < 0.5 ? Tendencia.ESTABLE : (redondeada > 0 ? Tendencia.SUBE : Tendencia.BAJA);

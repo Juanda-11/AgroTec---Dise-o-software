@@ -30,7 +30,7 @@ public class RecordatorioService {
                     a.getNota() != null && !a.getNota().isBlank() ? a.getNota() : "Tienes una labor programada.",
                     "Cuando la termines, márcala como hecha en la app.", a.getCultivoId(),
                     "Recordatorio programado por ti", "recordatorio:" + a.getId());
-            a.setRecordatorioEnviado(true);
+            a.marcarRecordatorioEnviado();
             actividades.save(a);
         }
         return vencidas.size();

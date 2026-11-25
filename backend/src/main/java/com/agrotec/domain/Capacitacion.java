@@ -1,5 +1,6 @@
 package com.agrotec.domain;
 
+import com.agrotec.util.Textos;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -19,6 +20,13 @@ public class Capacitacion {
     private String entidad;
     private String url;
     private boolean descargable = true;
+
+
+    /** Los módulos generales (sin cultivo) aplican a todos; una consulta vacía no filtra. */
+    public boolean aplicaA(String cultivoBuscado) {
+        String filtro = Textos.normalizar(cultivoBuscado);
+        return filtro.isEmpty() || cultivo == null || Textos.normalizar(cultivo).equals(filtro);
+    }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

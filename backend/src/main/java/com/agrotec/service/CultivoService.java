@@ -62,8 +62,7 @@ public class CultivoService {
 
     public CultivoDto.Response cambiarEstado(String usuarioId, String id, EstadoCultivo estado) {
         Cultivo c = buscar(usuarioId, id);
-        c.setEstado(estado);
-        c.setActualizadoEn(Instant.now());
+        c.cambiarEstado(estado);
         return CultivoDto.Response.de(cultivos.save(c));
     }
 

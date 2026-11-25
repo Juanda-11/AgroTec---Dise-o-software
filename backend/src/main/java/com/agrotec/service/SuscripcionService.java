@@ -73,8 +73,7 @@ public class SuscripcionService {
         s.setMonto(PRECIO_PLUS);
         suscripciones.save(s);
 
-        u.setPlan(PlanTipo.PLUS);
-        u.setPlanVigenteHasta(fin);
+        u.activarPlus(fin);
         usuarios.save(u);
         notificaciones.enviarMensaje(u, null, "Pago confirmado",
                 "Tu plan Plus está activo hasta el " + fin.toString().substring(0, 10) + ". Ref. " + pago.referencia());
@@ -87,7 +86,7 @@ public class SuscripcionService {
                 .orElseThrow(() -> new BusinessException("No tienes una suscripción activa para cancelar"));
         suscripciones.findByUsuarioIdOrderByInicioDesc(u.getId()).forEach(s -> {
             if (!s.isCancelada()) {
-                s.setCancelada(true);
+                s.cancelar();
                 suscripciones.save(s);
             }
         });

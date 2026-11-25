@@ -23,6 +23,16 @@ public class Actividad {
     private boolean completada;
     private Instant actualizadoEn = Instant.now();
 
+
+    public void completar() {
+        completada = true;
+        actualizadoEn = Instant.now();
+    }
+
+    public void marcarRecordatorioEnviado() {
+        recordatorioEnviado = true;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

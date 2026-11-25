@@ -13,7 +13,6 @@ import com.agrotec.integration.notification.MensajeEnviado;
 import com.agrotec.integration.notification.NotificationChannelFactory;
 import com.agrotec.repository.UsuarioRepository;
 import com.agrotec.util.Celulares;
-import com.agrotec.util.HorarioSilencioso;
 import com.agrotec.util.Textos;
 import java.time.LocalTime;
 import java.util.LinkedHashSet;
@@ -71,11 +70,11 @@ public class NotificacionService {
      */
     public void enviarMensaje(Usuario u, TipoAlerta tipo, String titulo, String mensaje) {
         PreferenciasNotificacion p = u.getPreferencias();
-        if (tipo != null && !p.getTipos().contains(tipo)) {
+        if (tipo != null && !p.permite(tipo)) {
             return;
         }
         LocalTime ahora = LocalTime.now(Textos.ZONA);
-        if (HorarioSilencioso.estaEnSilencio(ahora, p.getSilencioInicio(), p.getSilencioFin())) {
+        if (p.estaEnSilencio(ahora)) {
             log.info("Horario silencioso: no se envía '{}' a {}", titulo, u.getNombre());
             return;
         }

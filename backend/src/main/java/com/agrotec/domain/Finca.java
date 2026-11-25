@@ -21,6 +21,12 @@ public class Finca {
     private Double longitud;
     private Instant actualizadoEn = Instant.now();
 
+
+    /** true si tiene coordenadas propias (GPS); si no, se usa la zona del municipio. */
+    public boolean tieneUbicacion() {
+        return latitud != null && longitud != null;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

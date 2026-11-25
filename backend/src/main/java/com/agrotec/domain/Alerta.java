@@ -26,6 +26,11 @@ public class Alerta {
     private Instant creadaEn = Instant.now();
     private boolean leida;
 
+
+    public void marcarLeida() {
+        leida = true;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

@@ -2,7 +2,6 @@ package com.agrotec.service;
 
 import com.agrotec.domain.Alerta;
 import com.agrotec.domain.Cultivo;
-import com.agrotec.domain.EstadoCultivo;
 import com.agrotec.domain.Finca;
 import com.agrotec.domain.NivelRiesgo;
 import com.agrotec.domain.TipoAlerta;
@@ -59,7 +58,7 @@ public class AlertaService {
     public AlertaDto.Response marcarLeida(String usuarioId, String id) {
         Alerta a = alertas.findByIdAndUsuarioId(id, usuarioId)
                 .orElseThrow(() -> new NotFoundException("Alerta no encontrada"));
-        a.setLeida(true);
+        a.marcarLeida();
         return AlertaDto.Response.de(alertas.save(a));
     }
 
@@ -80,7 +79,7 @@ public class AlertaService {
             }
         }
         List<Cultivo> activos = cultivos.findByUsuarioIdOrderByActualizadoEnDesc(u.getId()).stream()
-                .filter(c -> c.getEstado() == EstadoCultivo.ACTIVO).toList();
+                .filter(Cultivo::estaActivo).toList();
         for (Cultivo c : activos) {
             List<HallazgoRiesgo> plagas = new ArrayList<>(ReglasPlagas.evaluar(c.getTipo(), fc.dias()));
             for (HallazgoRiesgo h : plagas) {

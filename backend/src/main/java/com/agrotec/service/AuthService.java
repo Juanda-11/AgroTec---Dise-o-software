@@ -69,20 +69,15 @@ public class AuthService {
         Usuario u = usuarios.findByCelular(celular)
                 .orElseThrow(() -> new UnauthorizedException("Celular o contraseña incorrectos"));
         Instant ahora = Instant.now();
-        if (u.getBloqueadoHasta() != null && u.getBloqueadoHasta().isAfter(ahora)) {
+        if (u.estaBloqueado(ahora)) {
             throw new UnauthorizedException("Cuenta bloqueada por intentos fallidos. Intenta de nuevo en unos minutos.");
         }
         if (!encoder.matches(r.password(), u.getPasswordHash())) {
-            u.setIntentosFallidos(u.getIntentosFallidos() + 1);
-            if (u.getIntentosFallidos() >= MAX_INTENTOS) {
-                u.setBloqueadoHasta(ahora.plus(BLOQUEO));
-                u.setIntentosFallidos(0);
-            }
+            u.registrarIntentoFallido(ahora, MAX_INTENTOS, BLOQUEO);
             usuarios.save(u);
             throw new UnauthorizedException("Celular o contraseña incorrectos");
         }
-        u.setIntentosFallidos(0);
-        u.setBloqueadoHasta(null);
+        u.reiniciarIntentos();
         usuarios.save(u);
         return respuesta(u);
     }
@@ -121,8 +116,7 @@ public class AuthService {
         u.setPasswordHash(encoder.encode(r.nuevaPassword()));
         u.setCodigoRecuperacionHash(null);
         u.setCodigoRecuperacionExpira(null);
-        u.setIntentosFallidos(0);
-        u.setBloqueadoHasta(null);
+        u.reiniciarIntentos();
         usuarios.save(u);
     }
 

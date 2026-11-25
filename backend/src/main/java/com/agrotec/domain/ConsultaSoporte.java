@@ -22,6 +22,21 @@ public class ConsultaSoporte {
     private Instant creadaEn = Instant.now();
     private Instant respondidaEn;
 
+
+    /** Un asesor empieza a revisar la consulta. */
+    public void tomar() {
+        if (estado == EstadoConsulta.ENVIADA) {
+            estado = EstadoConsulta.EN_REVISION;
+        }
+    }
+
+    public void responder(String texto, String asesor) {
+        respuesta = texto;
+        asesorNombre = asesor;
+        estado = EstadoConsulta.RESPONDIDA;
+        respondidaEn = Instant.now();
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }

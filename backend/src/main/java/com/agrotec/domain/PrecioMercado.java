@@ -20,6 +20,12 @@ public class PrecioMercado {
     private LocalDate fecha;
     private String fuente;
 
+
+    /** Variación porcentual frente a un precio anterior (0 si no hay referencia válida). */
+    public double variacionRespecto(long anterior) {
+        return anterior > 0 ? (precio - anterior) * 100.0 / anterior : 0.0;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getProducto() { return producto; }

@@ -19,6 +19,12 @@ public class Suscripcion {
     private String referenciaPago;
     private long monto;
 
+
+    /** Cancela la renovación; el período pagado se conserva. */
+    public void cancelar() {
+        cancelada = true;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getUsuarioId() { return usuarioId; }
