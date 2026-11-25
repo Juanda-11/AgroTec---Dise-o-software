@@ -7,6 +7,7 @@ Asistente virtual inteligente para agricultores: app móvil sencilla para organi
 - 🧑‍🌾 Historias de usuario: [docs/historias-usuario.md](docs/historias-usuario.md)
 - 🖼️ Wireframes: [docs/wireframes/](docs/wireframes/README.md)
 - 🏗️ Arquitectura (5 vistas, patrones, guía de estudio): [docs/arquitectura/](docs/arquitectura/README.md)
+- 🎓 Guía de sustentación, Postman y ejercicios: [docs/sustentacion/](docs/sustentacion/guia-sustentacion.md)
 - ▶️ Cómo ejecutar y probar: [docs/guia-ejecucion.md](docs/guia-ejecucion.md)
 
 ## Ejecutar
