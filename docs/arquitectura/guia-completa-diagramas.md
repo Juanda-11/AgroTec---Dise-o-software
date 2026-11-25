@@ -4,7 +4,7 @@ Todo en un solo documento: por cada diagrama tienes **qué crear, todos los elem
 
 | # | Diapositiva | Diagrama en Visual Paradigm | Tiempo aprox. |
 |---|---|---|---|
-| 1 | Vista de contexto | Diagrama de casos de uso | 30 min |
+| 1 | Vista de contexto | Diagrama de contexto (flujo de datos) | 30 min |
 | 2 | Vista funcional | Diagrama de componentes | 40 min |
 | 3 | Vista lógica | Diagrama de clases (dominio) | 40 min |
 | 4 | Vista de desarrollo | Diagrama de clases por capas y patrones | 45 min |
@@ -21,99 +21,33 @@ Todo en un solo documento: por cada diagrama tienes **qué crear, todos los elem
 
 ---
 
-# 1. Vista de contexto — Diagrama de casos de uso
+# 1. Vista de contexto — Diagrama de contexto (flujo de datos)
 
-**Nombre del diagrama:** `Vista de contexto - AgroTec`
-**Qué responde:** ¿qué hace el sistema y para quién? Es la vista más sencilla: el sistema como una caja, sus usuarios a un lado y los sistemas externos al otro.
+### Qué debe tener
+Es un **diagrama de contexto** (flujo de datos de nivel 0), como el ejemplo de la plantilla: **el sistema en un círculo central**, las entidades externas en rectángulos y **flechas con el nombre del dato** que entra o sale. No muestra pantallas, bases de datos ni módulos internos.
 
-## 1.1 Límite del sistema
-- Un rectángulo grande (**System**) con el nombre `AgroTec`. Todo lo que hace el sistema va **dentro**; los actores van **fuera**.
+### Entidades y flujos
 
-## 1.2 Actores (fuera del rectángulo)
+| Entidad | Tipo | Envía a AgroTec | Recibe de AgroTec |
+|---|---|---|---|
+| Agricultor | Persona | Registro, finca, cultivos, consultas y pagos | Clima, alertas, precios y capacitaciones |
+| Asesor técnico | Persona | Respuestas técnicas | Consultas de agricultores |
+| Administrador | Persona | Precios de mercado | Confirmación de carga |
+| Pasarela de pagos | Sistema externo | Resultado y referencia del pago | Solicitud de cobro |
+| Proveedor meteorológico | Sistema externo | Pronóstico del clima | Ubicación de la finca |
+| Fuente de precios SIPSA-DANE | Sistema externo | Precios de productos e insumos | — |
+| Mensajería WhatsApp / SMS / Push | Sistema externo | — | Alertas, códigos y avisos de pago |
 
-| Lado | Actor | Estereotipo |
-|---|---|---|
-| Izquierda | Agricultor | — |
-| Izquierda | Asesor técnico | — |
-| Izquierda | Administrador | — |
-| Derecha | Proveedor meteorológico | `«sistema externo»` |
-| Derecha | Fuente de precios (SIPSA-DANE) | `«sistema externo»` |
-| Derecha | Pasarela de pagos | `«sistema externo»` |
-| Derecha | WhatsApp / SMS / Push | `«sistema externo»` |
+> El proveedor del clima, la fuente de precios, la pasarela de pagos y la mensajería están **simulados** en el código (Open-Meteo es opcional). Dilo si te preguntan.
 
-## 1.3 Casos de uso (óvalos dentro del rectángulo): 19 en total
+### Qué decir (30 segundos)
+> «AgroTec es el sistema central. El agricultor le entrega sus datos de finca y cultivos y recibe clima, alertas y precios. El asesor responde consultas y el administrador carga precios. Hacia afuera, AgroTec pide el pronóstico a un proveedor meteorológico, recibe precios de SIPSA-DANE, cobra con una pasarela de pagos y envía avisos por mensajería.»
 
-**Del Agricultor (15)**
-1. Registrarse e iniciar sesión
-2. Configurar perfil y finca
-3. Gestionar mis datos personales
-4. Gestionar cultivos
-5. Registrar actividades y recordatorios
-6. Consultar pronóstico del clima
-7. Recibir alertas de clima y plagas
-8. Consultar precios y tendencias
-9. Alerta de precio objetivo
-10. Usar sin conexión y sincronizar
-11. Configurar notificaciones
-12. Ver capacitaciones
-13. Consultar a un asesor
-14. Suscribirse al plan Plus
-15. Ver resumen del día
-
-**Del Asesor técnico (1):** 16. Responder consultas técnicas
-**Del Administrador (1):** 17. Cargar precios de mercado
-**Internos, solo para las relaciones «include» (2):** 18. Enviar notificación · 19. Procesar pago
-
-## 1.4 Conexiones (checklist)
-
-**Asociaciones** (línea simple, sin flecha)
-
-- [ ] Agricultor — casos 1 al 15 (los 15)
-- [ ] Asesor técnico — Responder consultas técnicas
-- [ ] Administrador — Cargar precios de mercado
-- [ ] Proveedor meteorológico — Consultar pronóstico del clima
-- [ ] Proveedor meteorológico — Recibir alertas de clima y plagas
-- [ ] Fuente de precios — Consultar precios y tendencias
-- [ ] Fuente de precios — Cargar precios de mercado
-- [ ] Pasarela de pagos — Procesar pago
-- [ ] WhatsApp / SMS / Push — Enviar notificación
-
-**Relaciones «include»** (línea punteada con flecha hacia el caso incluido; escribe `include` en el campo *Stereotype*)
-
-- [ ] Recibir alertas de clima y plagas → Enviar notificación
-- [ ] Alerta de precio objetivo → Enviar notificación
-- [ ] Registrar actividades y recordatorios → Enviar notificación
-- [ ] Suscribirse al plan Plus → Procesar pago
-
-## 1.5 Ubicación para que no se crucen las líneas
-
-```
-  Asesor técnico ─┐        ┌──────────── AgroTec ───────────┐
-                  ├───────►│  16 Responder consultas ...     │
-                  │        │                                 │      ┌ Pasarela de pagos
-  Agricultor ─────┼───────►│  1 ... 15   (dos columnas)      │──────┤ WhatsApp / SMS / Push
-  (centro vertical)        │  18 Enviar notificación         │      │ Proveedor meteorológico
-                  │        │  19 Procesar pago               │      └ Fuente de precios
-  Administrador ──┴───────►│  17 Cargar precios              │
-                           └─────────────────────────────────┘
-```
-
-- Pon el Agricultor en el **centro vertical**, pegado al borde izquierdo, y usa conexiones de **línea recta**.
-- Deja cerca de su actor externo los casos que lo usan: *Consultar pronóstico* y *Recibir alertas* hacia el proveedor meteorológico; *Consultar precios* y *Cargar precios* hacia la fuente de precios.
-
-## 1.6 Revisión final
-- [ ] 19 óvalos y 7 actores
-- [ ] 4 flechas «include» con la etiqueta como estereotipo
-- [ ] Sin errores de ortografía («notificación», «Gestionar»)
-- [ ] Los 4 sistemas externos tienen `«sistema externo»`
-
-## 1.7 Qué decir (30 segundos)
-> «AgroTec ayuda al pequeño agricultor de Nariño a organizar sus cultivos, enterarse del clima y de las plagas antes de que lleguen, y conocer los precios para vender mejor, incluso con poca señal. El asesor responde consultas y el administrador carga precios. El sistema depende de cuatro servicios externos: clima, precios, pagos y mensajería.»
-
-## 1.8 Si el profesor pregunta
-- **«include» vs «extend»:** con *include* el caso base **siempre** usa al otro; con *extend* el caso adicional **a veces** lo amplía.
-- **¿Por qué el proveedor meteorológico es un actor?** Está fuera del sistema y interactúa con él.
-- **¿Dónde están los requerimientos de calidad (rendimiento, seguridad)?** No son acciones de un usuario; son requerimientos no funcionales y se explican aparte.
+### Preguntas probables
+- **¿Qué diferencia hay con un diagrama de casos de uso?** El de contexto muestra **qué datos** entran y salen del sistema; el de casos de uso muestra **qué funciones** usa cada actor.
+- **¿Por qué la base de datos no aparece?** Es parte interna del sistema; el contexto solo muestra lo que está fuera.
+- **¿Por qué la fuente de precios tiene una sola flecha?** El sistema solo recibe sus datos; no le envía nada.
+- **¿Dónde se ve en el código?** Clima: `integration/weather`; pagos: `integration/payment`; mensajería: `integration/notification`; precios: `web/AdminController` (carga) y `config/DataSeeder` (datos de ejemplo).
 
 ---
 
@@ -191,7 +125,7 @@ Los componentes de las secciones siguientes se **anidan** (se arrastran dentro) 
 
 ## 2.7 Interfaces (lo que más puntúa en esta vista)
 
-Dibuja **tres**. Cada una tiene un componente que la **ofrece** (círculo) y otro que la **necesita** (semicírculo):
+Dibuja **cuatro** (la cuarta es `PaymentGateway`, ofrecida por `Adaptadores externos` y requerida por `Servicios de aplicación`). Cada una tiene un componente que la **ofrece** (círculo) y otro que la **necesita** (semicírculo):
 
 | Interfaz | La ofrece (círculo) | La necesita (semicírculo) | Para qué sirve |
 |---|---|---|---|
@@ -222,7 +156,7 @@ Dibuja **tres**. Cada una tiene un componente que la **ofrece** (círculo) y otr
 - [ ] 12 componentes internos + 4 externos
 - [ ] Ortografía: «Seguridad **JWT**»
 - [ ] Las 15 conexiones de la lista, con sus etiquetas
-- [ ] 3 interfaces
+- [ ] 4 interfaces
 - [ ] Externos con otro color y estereotipo
 
 ## 2.10 Qué decir (30 segundos)
@@ -238,111 +172,247 @@ Dibuja **tres**. Cada una tiene un componente que la **ofrece** (círculo) y otr
 
 # 3. Vista lógica — Diagrama de clases del dominio
 
-**Nombre del diagrama:** `Vista lógica - AgroTec`
-**Qué responde:** ¿cuáles son los conceptos del negocio y cómo se relacionan? Solo clases del dominio, sin controladores ni repositorios.
+### Qué debe tener
+12 clases con atributos **y métodos**, 11 enumeraciones y 23 relaciones (12 entre clases y 11 dependencias hacia enumeraciones). Coincide uno a uno con `backend/src/main/java/com/agrotec/domain/`.
 
-## 3.1 Las 12 clases y sus atributos
+El atributo `preferencias` de `Usuario` no se escribe en la caja: se dibuja como la composición hacia `PreferenciasNotificacion`. La enumeración `Tendencia` (sube, baja, estable) no se dibuja: no se guarda, solo se calcula al responder la API de precios.
 
-Formato en Visual Paradigm: `-nombre: Tipo` (el guion significa privado).
+### Clases (atributos y métodos)
 
 **Usuario**
-`-id: String` · `-celular: String` · `-nombre: String` · `-passwordHash: String` · `-rol: Rol` · `-plan: PlanTipo` · `-planVigenteHasta: Instant` · `-consentimientoDatos: boolean`
-Operación: `+planEfectivo(): PlanTipo`
+```
+-id: String
+-celular: String
+-nombre: String
+-passwordHash: String
+-rol: Rol
+-consentimientoDatos: boolean
+-consentimientoFecha: Instant
+-plan: PlanTipo
+-planVigenteHasta: Instant
+-codigoRecuperacionHash: String
+-codigoRecuperacionExpira: Instant
+-intentosFallidos: int
+-bloqueadoHasta: Instant
+-creadoEn: Instant
+--
++planEfectivo(): PlanTipo
++estaBloqueado(ahora): boolean
++registrarIntentoFallido(ahora, maximo, bloqueo)
++reiniciarIntentos()
++activarPlus(hasta)
+```
 
 **PreferenciasNotificacion**
-`-canales: Set<Canal>` · `-tipos: Set<TipoAlerta>` · `-numeroWhatsapp: String` · `-silencioInicio: String` · `-silencioFin: String`
+```
+-canales: Set<Canal>
+-tipos: Set<TipoAlerta>
+-numeroWhatsapp: String
+-silencioInicio: String
+-silencioFin: String
+--
++permite(tipo): boolean
++estaEnSilencio(hora): boolean
+```
 
 **Finca**
-`-id: String` · `-nombre: String` · `-departamento: String` · `-municipio: String` · `-vereda: String` · `-latitud: Double` · `-longitud: Double`
+```
+-id: String
+-usuarioId: String
+-nombre: String
+-departamento: String
+-municipio: String
+-vereda: String
+-latitud: Double
+-longitud: Double
+-actualizadoEn: Instant
+--
++tieneUbicacion(): boolean
+```
 
 **Cultivo**
-`-id: String` · `-tipo: String` · `-lote: String` · `-variedad: String` · `-areaHa: Double` · `-fechaSiembra: LocalDate` · `-fechaCosechaEstimada: LocalDate` · `-estado: EstadoCultivo`
+```
+-id: String
+-usuarioId: String
+-clienteId: String
+-tipo: String
+-lote: String
+-variedad: String
+-areaHa: Double
+-fechaSiembra: LocalDate
+-fechaCosechaEstimada: LocalDate
+-estado: EstadoCultivo
+-notas: String
+-actualizadoEn: Instant
+--
++cambiarEstado(nuevo)
++estaActivo(): boolean
+```
 
 **Actividad**
-`-id: String` · `-tipo: TipoActividad` · `-fecha: LocalDate` · `-nota: String` · `-recordatorio: Instant` · `-completada: boolean`
+```
+-id: String
+-usuarioId: String
+-cultivoId: String
+-clienteId: String
+-tipo: TipoActividad
+-fecha: LocalDate
+-nota: String
+-recordatorio: Instant
+-recordatorioEnviado: boolean
+-completada: boolean
+-actualizadoEn: Instant
+--
++completar()
++marcarRecordatorioEnviado()
+```
 
 **Alerta**
-`-id: String` · `-tipo: TipoAlerta` · `-nivel: NivelRiesgo` · `-titulo: String` · `-mensaje: String` · `-recomendacion: String` · `-fuente: String` · `-leida: boolean`
+```
+-id: String
+-usuarioId: String
+-tipo: TipoAlerta
+-nivel: NivelRiesgo
+-titulo: String
+-mensaje: String
+-recomendacion: String
+-cultivoId: String
+-fuente: String
+-clave: String
+-creadaEn: Instant
+-leida: boolean
+--
++marcarLeida()
+```
 
 **AlertaPrecio**
-`-id: String` · `-producto: String` · `-plaza: String` · `-precioObjetivo: long` · `-activa: boolean`
+```
+-id: String
+-usuarioId: String
+-producto: String
+-plaza: String
+-precioObjetivo: long
+-activa: boolean
+-ultimaNotificacion: LocalDate
+--
++seCumple(precio, fecha): boolean
++marcarNotificada(fecha)
+```
 
 **PrecioMercado**
-`-id: String` · `-producto: String` · `-categoria: CategoriaPrecio` · `-plaza: String` · `-unidad: String` · `-precio: long` · `-fecha: LocalDate` · `-fuente: String`
+```
+-id: String
+-producto: String
+-categoria: CategoriaPrecio
+-plaza: String
+-unidad: String
+-precio: long
+-fecha: LocalDate
+-fuente: String
+--
++variacionRespecto(anterior): double
+```
 
 **Capacitacion**
-`-id: String` · `-titulo: String` · `-cultivo: String` · `-formato: FormatoCapacitacion` · `-duracionMin: int`
+```
+-id: String
+-titulo: String
+-descripcion: String
+-cultivo: String
+-formato: FormatoCapacitacion
+-duracionMin: int
+-nivel: String
+-entidad: String
+-url: String
+-descargable: boolean
+--
++aplicaA(cultivoBuscado): boolean
+```
 
 **AvanceCapacitacion**
-`-id: String` · `-porcentaje: int`
+```
+-id: String
+-usuarioId: String
+-capacitacionId: String
+-porcentaje: int
+-actualizadoEn: Instant
+--
++actualizar(nuevoPorcentaje)
+```
 
 **ConsultaSoporte**
-`-id: String` · `-mensaje: String` · `-fotos: List<String>` · `-estado: EstadoConsulta` · `-respuesta: String`
+```
+-id: String
+-usuarioId: String
+-mensaje: String
+-fotos: List<String>
+-estado: EstadoConsulta
+-respuesta: String
+-asesorNombre: String
+-creadaEn: Instant
+-respondidaEn: Instant
+--
++tomar()
++responder(texto, asesor)
+```
 
 **Suscripcion**
-`-id: String` · `-plan: PlanTipo` · `-inicio: Instant` · `-fin: Instant` · `-metodoPago: MetodoPago` · `-monto: long`
+```
+-id: String
+-usuarioId: String
+-plan: PlanTipo
+-cancelada: boolean
+-inicio: Instant
+-fin: Instant
+-metodoPago: MetodoPago
+-referenciaPago: String
+-monto: long
+--
++cancelar()
+```
 
-> Si una clase queda muy cargada, quita `id` de las secundarias. Los atributos de tipo enumeración (como `rol`) se pueden mostrar solo con el nombre del tipo.
+### Relaciones entre clases
 
-## 3.2 Enumeraciones (dibuja estas 4 con el estereotipo `«enumeration»`)
-
-| Enumeración | Valores |
-|---|---|
-| `Rol` | AGRICULTOR, ASESOR, ADMIN |
-| `PlanTipo` | GRATIS, PLUS |
-| `TipoAlerta` | CLIMA, PLAGA, PRECIO, LABOR |
-| `Canal` | PUSH, WHATSAPP, SMS |
-
-Las demás (`EstadoCultivo`, `TipoActividad`, `NivelRiesgo`, `CategoriaPrecio`, `FormatoCapacitacion`, `EstadoConsulta`, `MetodoPago`) quedan solo como tipo del atributo.
-
-## 3.3 Relaciones (checklist)
-
-| # | Desde | Hacia | Tipo | Multiplicidad (origen — destino) |
+| Desde | Hacia | Tipo | Multiplicidad | Nombre |
 |---|---|---|---|---|
-| 1 | Usuario | PreferenciasNotificacion | **Composición** (rombo relleno junto a Usuario) | 1 — 1 |
-| 2 | Usuario | Finca | Asociación | 1 — 0..1 |
-| 3 | Usuario | Cultivo | Asociación | 1 — 0..* |
-| 4 | Cultivo | Actividad | **Composición** (rombo junto a Cultivo) | 1 — 0..* |
-| 5 | Usuario | Alerta | Asociación | 1 — 0..* |
-| 6 | Alerta | Cultivo | Asociación opcional | 0..* — 0..1 |
-| 7 | Usuario | AlertaPrecio | Asociación | 1 — 0..* |
-| 8 | AlertaPrecio | PrecioMercado | **Dependencia** (flecha punteada), etiqueta «compara» | — |
-| 9 | Usuario | AvanceCapacitacion | Asociación | 1 — 0..* |
-| 10 | Capacitacion | AvanceCapacitacion | Asociación | 1 — 0..* |
-| 11 | Usuario | ConsultaSoporte | Asociación | 1 — 0..* |
-| 12 | Usuario | Suscripcion | Asociación | 1 — 0..* |
+| Usuario | PreferenciasNotificacion | Composición | 1 — 1 | define |
+| Usuario | Finca | Asociación | 1 — 0..1 | posee |
+| Usuario | Cultivo | Asociación | 1 — 0..* | registra |
+| Cultivo | Actividad | Composición | 1 — 0..* | tiene |
+| Usuario | Alerta | Asociación | 1 — 0..* | recibe |
+| Alerta | Cultivo | Asociación | 0..* — 0..1 | se refiere a |
+| Usuario | AlertaPrecio | Asociación | 1 — 0..* | configura |
+| AlertaPrecio | PrecioMercado | Dependencia | — | compara |
+| Usuario | AvanceCapacitacion | Asociación | 1 — 0..* | avanza en |
+| Capacitacion | AvanceCapacitacion | Asociación | 1 — 0..* | se sigue |
+| Usuario | ConsultaSoporte | Asociación | 1 — 0..* | envía |
+| Usuario | Suscripcion | Asociación | 1 — 0..* | contrata |
 
-Las multiplicidades se escriben con doble clic sobre la línea.
+### Enumeraciones (con dependencia punteada desde su clase)
 
-## 3.4 Ubicación (Usuario al centro)
+| Enumeración | Valores | Unida a |
+|---|---|---|
+| `Rol` | AGRICULTOR, ASESOR, ADMIN | Usuario |
+| `Canal` | PUSH, WHATSAPP, SMS | PreferenciasNotificacion |
+| `TipoAlerta` | CLIMA, PLAGA, PRECIO, LABOR | Alerta |
+| `NivelRiesgo` | BAJO, MEDIO, ALTO | Alerta |
+| `EstadoCultivo` | ACTIVO, COSECHADO | Cultivo |
+| `TipoActividad` | SIEMBRA, RIEGO, FERTILIZACION, CONTROL_PLAGAS, DESHIERBA, COSECHA, OTRA | Actividad |
+| `CategoriaPrecio` | PRODUCTO, INSUMO | PrecioMercado |
+| `FormatoCapacitacion` | VIDEO, GUIA_PDF | Capacitacion |
+| `EstadoConsulta` | ENVIADA, EN_REVISION, RESPONDIDA | ConsultaSoporte |
+| `MetodoPago` | NEQUI, DAVIPLATA, TARJETA, PSE | Suscripcion |
+| `PlanTipo` | GRATIS, PLUS | Suscripcion |
 
-```
-   Capacitacion ─── AvanceCapacitacion          Suscripcion
-                          \                     /
-   ConsultaSoporte ────── USUARIO ────────── Finca
-                         /    |     \
-        AlertaPrecio ───     Alerta   PreferenciasNotificacion
-             |                  |
-        PrecioMercado        Cultivo ─── Actividad
-```
+### Qué decir (30 segundos)
+> «El corazón del dominio es el Usuario. Tiene una finca y registra cultivos; cada cultivo guarda sus actividades. El sistema le genera alertas, que se entregan según sus preferencias. Puede configurar alertas de precio que comparan contra los precios del mercado, seguir capacitaciones, consultar a un asesor y contratar el plan Plus. Cada clase tiene sus datos y las reglas que le corresponden.»
 
-Colores sugeridos (máximo cuatro): usuarios y finca · cultivos y actividades · alertas y precios · capacitación, soporte y planes.
-
-## 3.5 Revisión final
-- [ ] 12 clases con sus atributos
-- [ ] 4 enumeraciones con sus valores
-- [ ] 12 relaciones con multiplicidades
-- [ ] 2 composiciones (rombo relleno) y 1 dependencia punteada
-- [ ] Usuario al centro
-
-## 3.6 Qué decir (30 segundos)
-> «El corazón del dominio es el Usuario. Tiene una finca y varios cultivos; cada cultivo guarda su historial de actividades. El sistema genera Alertas para el usuario, que se envían según sus preferencias. Los precios de mercado son independientes del usuario, y el agricultor puede fijar alertas de precio objetivo. Además modelamos capacitaciones con su avance, consultas al asesor y suscripciones.»
-
-## 3.7 Si el profesor pregunta
-- **¿Por qué Actividad es composición de Cultivo y Alerta no?** Si se borra el cultivo, sus actividades pierden sentido y se borran. La alerta puede existir sin cultivo (una alerta de helada afecta a toda la finca).
-- **¿Por qué las preferencias están dentro de Usuario?** Siempre se leen junto con el usuario y no crecen sin límite; en MongoDB se guardan dentro del mismo documento.
-- **¿Por qué PrecioMercado no está ligado a Usuario?** Los precios son datos del mercado, iguales para todos; el usuario solo se relaciona con ellos por medio de sus alertas de precio.
-- **¿Cuál es la diferencia entre composición y asociación?** En la composición la parte no existe sin el todo; en la asociación, ambas existen por separado.
+### Preguntas probables
+- **¿Por qué Actividad es composición de Cultivo y Alerta no?** Si se borra el cultivo, sus actividades se borran con él. La alerta puede existir sin cultivo (una helada afecta a toda la finca).
+- **¿Por qué las preferencias están dentro de Usuario?** Siempre se leen con el usuario y no crecen sin límite; en MongoDB se guardan en el mismo documento.
+- **¿Por qué las entidades tienen métodos?** La lógica que pertenece a un objeto vive en ese objeto (`AlertaPrecio.seCumple`, `Usuario.estaBloqueado`) y no repartida en los servicios. Los servicios coordinan; las entidades deciden sobre sus propios datos.
+- **¿Por qué no hay herencia?** Las diferencias entre tipos (alertas, roles) son de datos, no de comportamiento, así que se modelan con enumeraciones. La realización de interfaces aparece en la vista de desarrollo.
+- **¿Por qué hay `usuarioId` además de la línea de asociación?** La línea es la relación conceptual; `usuarioId` es la forma en que MongoDB la guarda (referencia).
 
 ---
 

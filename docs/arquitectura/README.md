@@ -4,7 +4,7 @@ Documentos para la presentación de **Diseño de Software**. Cada vista correspo
 
 | Diapositiva | Vista | Diagrama en Visual Paradigm | Documento |
 |---|---|---|---|
-| 2 | Contexto: qué hace el sistema | Diagrama de casos de uso (con actores y sistemas externos) | [01-vista-contexto.md](01-vista-contexto.md) |
+| 2 | Contexto: qué hace el sistema | Diagrama de contexto (flujo de datos, sistema en un círculo) | [01-vista-contexto.md](01-vista-contexto.md) |
 | 3 | Funcional | Diagrama de componentes | [02-vista-funcional.md](02-vista-funcional.md) |
 | 4 | Lógica | Diagrama de clases (dominio) | [03-vista-logica.md](03-vista-logica.md) |
 | 5 | Desarrollo | Diagrama de clases por capas, con patrones | [04-vista-desarrollo.md](04-vista-desarrollo.md) |

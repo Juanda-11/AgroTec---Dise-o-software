@@ -5,7 +5,7 @@ Esta guía te ayuda a **plasmar** los diagramas tú mismo; así entiendes cada d
 ## Orden recomendado (≈ 2 a 3 horas en total)
 
 1. **Lógica** (clases del dominio): es la más sencilla y la base de las demás. ~40 min.
-2. **Contexto** (casos de uso). ~30 min.
+2. **Contexto** (diagrama de flujo de datos). ~30 min.
 3. **Funcional** (componentes). ~30 min.
 4. **Desarrollo** (clases por capas y patrones). ~40 min.
 5. **Despliegue**. ~20 min.
@@ -39,7 +39,7 @@ Esta guía te ayuda a **plasmar** los diagramas tú mismo; así entiendes cada d
 
 | Vista | Pregunta típica | Dónde está la respuesta |
 |---|---|---|
-| Contexto | ¿Por qué este actor es secundario? ¿Qué es un «include»? | `01-vista-contexto.md` |
+| Contexto | ¿Qué datos entran y salen? ¿Qué diferencia hay con casos de uso? | `01-vista-contexto.md` |
 | Funcional | ¿Qué es una interfaz provista y una requerida? ¿Por qué el clima está detrás de una interfaz? | `02-vista-funcional.md` |
 | Lógica | ¿Por qué Actividad es composición de Cultivo y Alerta no? | `03-vista-logica.md` |
 | Desarrollo | ¿Qué patrón es este y qué problema resuelve? | `04-vista-desarrollo.md` y `preguntas-profesor.md` |
